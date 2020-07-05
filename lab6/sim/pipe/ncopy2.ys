@@ -1,0 +1,147 @@
+#/* $begin ncopy-ys */
+##################################################################
+# ncopy.ys - Copy a src block of len words to dst.
+# Return the number of positive words (>0) contained in src.
+#
+# Include your name and ID here.
+# Lan Haoning 518021910270
+# Describe how and why you modified the baseline code.
+# Try1:
+# 1.Use iaddq to reduce instructions
+# 2.loop unrolling(8), reduce reliance
+# score:52.1??? thinking...
+# when num is small, the performance is bad
+# consider remain
+##################################################################
+# Do not modify this portion
+# Function prologue.
+# %rdi = src, %rsi = dst, %rdx = len
+ncopy:
+
+##################################################################
+# You can modify this portion
+	# Loop header
+
+# Considering initial condition ,annotate this
+#	xorq %rax,%rax		      # count = 0;
+
+	#Check if there are 8 elements.
+Test8E:
+	iaddq $-8,%rdx		      # len < 8?
+	jl Loop8less		      # if so, goto Loop8less
+
+    # 8 loop unrolling
+Loop8:	
+    mrmovq (%rdi), %rcx	      # read val1 from src...
+	mrmovq 0x8(%rdi), %r8     # read val2 from src...
+	mrmovq 0x10(%rdi), %r9    # read val3 from src...
+	mrmovq 0x18(%rdi), %r10   # read val4 from src...
+	mrmovq 0x20(%rdi), %r11   # read val5 from src...
+	mrmovq 0x28(%rdi), %r12   # read val6 from src...
+	mrmovq 0x30(%rdi), %r13   # read val7 from src...
+	mrmovq 0x38(%rdi), %r14   # read val8 from src...
+
+	rmmovq %rcx, (%rsi)	      # ...and store val1 to dst
+	rmmovq %r8, 0x8(%rsi)     # ...and store val2 to dst
+	rmmovq %r9, 0x10(%rsi)    # ...and store val3 to dst
+	rmmovq %r10, 0x18(%rsi)   # ...and store val4 to dst
+	rmmovq %r11, 0x20(%rsi)   # ...and store val5 to dst
+	rmmovq %r12, 0x28(%rsi)   # ...and store val6 to dst
+	rmmovq %r13, 0x30(%rsi)   # ...and store val7 to dst
+	rmmovq %r14, 0x38(%rsi)   # ...and store val8 to dst
+
+Test81:
+	andq %rcx, %rcx		      # val1 <= 0?
+	jle Test82		          # if so, goto Test2:
+	iaddq $1, %rax		      # count++
+
+Test82:
+	andq %r8, %r8		      # val2 <= 0?
+	jle Test83		          # if so, goto Test3:
+	iaddq $1, %rax		      # count++
+
+Test83:
+	andq %r9, %r9		      # val3 <= 0?
+	jle Test84		          # if so, goto Test4:
+	iaddq $1, %rax		      # count++
+
+Test84:
+	andq %r10, %r10		      # val4 <= 0?
+	jle Test85		          # if so, goto Test5:
+	iaddq $1, %rax		      # count++
+
+Test85:
+	andq %r11, %r11		      # val5 <= 0?
+	jle Test86		          # if so, goto Test6:
+	iaddq $1, %rax		      # count++
+
+Test86:
+	andq %r12, %r12		      # val6 <= 0?
+	jle Test87		          # if so, goto Test7:
+	iaddq $1, %rax		      # count++
+
+Test87:
+	andq %r13, %r13  	      # val7 <= 0?
+	jle Test88		          # if so, goto Test8:
+	iaddq $1, %rax		      # count++
+
+Test88:
+	andq %r14, %r14  	      # val8 <= 0?
+	jle Npos8		          # if so, goto Npos8:
+	iaddq $1, %rax		      # count++
+
+Npos8:	
+	iaddq $0x40, %rdi		      # src+=8
+	iaddq $0x40, %rsi		      # dst+=8
+	iaddq $-8, %rdx		          # len < 8?
+	jg Loop8			          # if so, goto Loop8:
+
+# elements less then 8
+
+# 2 ways
+Loop8less:
+    iaddq $6,%rdx 
+	jl Lastone
+
+Loop2:
+    mrmovq (%rdi), %rcx	      # read val1 from src...
+	mrmovq 0x8(%rdi),%r8      # read val2 from src...
+
+	rmmovq %rcx, (%rsi)	      # ...and store val1 to dst
+	rmmovq %r8,0x8(%rsi)      # ...and store val2 to dst
+
+Test21:
+	andq %rcx, %rcx		      # val1 <= 0?
+	jle Test22		          # if so, goto Test22
+	iaddq $1, %rax		      # count++
+
+Test22:
+	andq %r8, %r8		      # val2 <= 0?
+	jle Npos2		          # if so, goto Npos2:
+	iaddq $1, %rax		      # count++
+
+Npos2:	
+	iaddq $0x10, %rdi		      # src++
+	iaddq $0x10, %rsi		      # dst++	
+	iaddq $-2,%rdx		          # len > 2?
+	jge Loop2			          # if so, goto Loop2:
+
+Lastone:
+    iaddq $1,%rdx                 # len = 0?
+	jl Done                       # if so , goto Done
+	mrmovq (%rdi), %r10           # read val1 from src...
+	rmmovq %r10, (%rsi)           # ...and store val1 to dst
+	andq %r10,%r10                # val1 <= 0?
+	jle Done                      # if so, goto Done:
+	iaddq $1,%rax                 # count++
+
+
+##################################################################
+# Do not modify the following section of code
+# Function epilogue.
+Done:
+	ret
+##################################################################
+# Keep the following label at the end of your function
+End:
+#/* $end ncopy-ys */
