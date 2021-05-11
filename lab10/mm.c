@@ -1,6 +1,6 @@
 /*
  * mm.c - A correct, efficient and fast allocator designed by 
- *        Lan Haoning 518021910270
+ *        AlanHN 518021910xxx
  * 
  * In this approach:
  * 

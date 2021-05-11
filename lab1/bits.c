@@ -20,23 +20,22 @@
  * STEP 1: Fill in the following struct with your identifying info.
  */
 team_struct team =
-{
-   /* Team name: Replace with either:
+    {
+        /* Team name: Replace with either:
       Your login ID if working as a one person team
       or, ID1+ID2 where ID1 is the login ID of the first team member
       and ID2 is the login ID of the second team member */
-   "518021910270", 
-   /* Student name 1: Replace with the full name of first team member */
-   "LAN Haoning",
-   /* Login ID 1: Replace with the login ID of first team member */
-   "518021910270",
+        "518021910xxx",
+        /* Student name 1: Replace with the full name of first team member */
+        "AlanHN",
+        /* Login ID 1: Replace with the login ID of first team member */
+        "518021910xxx",
 
-   /* The following should only be changed if there are two team members */
-   /* Student name 2: Full name of the second team member */
-   "",
-   /* Login ID 2: Login ID of the second team member */
-   ""
-};
+        /* The following should only be changed if there are two team members */
+        /* Student name 2: Full name of the second team member */
+        "",
+        /* Login ID 2: Login ID of the second team member */
+        ""};
 
 #if 0
 /*
@@ -174,14 +173,15 @@ NOTES:
  *   Max ops: 12
  *   Rating: 4 
  */
-int bang(int x) {
+int bang(int x)
+{
   /* exploit ability of | to check if all bits  equal 0 */
-  int x1 = x | x>>16;
-  int x2 = x1 | x1>>8;
-  int x3 = x2 | x2>>4;
-  int x4 = x3 | x3>>2;
-  int x5 = x4 | x4>>1;
-  return (x5 & 1)^1;
+  int x1 = x | x >> 16;
+  int x2 = x1 | x1 >> 8;
+  int x3 = x2 | x2 >> 4;
+  int x4 = x3 | x3 >> 2;
+  int x5 = x4 | x4 >> 1;
+  return (x5 & 1) ^ 1;
 }
 /*
  * bitCount - returns count of number of 1's in word
@@ -190,18 +190,19 @@ int bang(int x) {
  *   Max ops: 40
  *   Rating: 4
  */
-int bitCount(int x) {
+int bitCount(int x)
+{
   /* exploit ability of mask  to add all bits */
   int m1 = 0x11 | (0x11 << 8);
   int mask = m1 | (m1 << 16);
   int s = x & mask;
-  s += x>>1 & mask;
-  s += x>>2 & mask;
-  s += x>>3 & mask;
+  s += x >> 1 & mask;
+  s += x >> 2 & mask;
+  s += x >> 3 & mask;
   s = s + (s >> 16);
   mask = 0xF | (0xF << 8);
   s = (s & mask) + ((s >> 4) & mask);
-  return (s + (s>>8)) & 0x3F;
+  return (s + (s >> 8)) & 0x3F;
 }
 /* 
  * copyLSB - set all bits of result to least significant bit of x
@@ -210,10 +211,11 @@ int bitCount(int x) {
  *   Max ops: 5
  *   Rating: 2
  */
-int copyLSB(int x) {
+int copyLSB(int x)
+{
   /* exploit ability of right shift to get theleast significant bit of x
   and left shift to set all bits */
-  return x<<31>>31; 
+  return x << 31 >> 31;
 }
 /* 
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
@@ -223,14 +225,15 @@ int copyLSB(int x) {
  *   Max ops: 15
  *   Rating: 2
  */
-int divpwr2(int x, int n) {
+int divpwr2(int x, int n)
+{
   /* exploit ability of right shift to get the sign of x
   if x is negative, x += 2^n-1
   exploit ability of right shift to div 2^n*/
-  int sign = x>>31;
-  int y = (1<<n) + ~0;
+  int sign = x >> 31;
+  int y = (1 << n) + ~0;
   int z = sign & y;
-  return (x+z)>>n;
+  return (x + z) >> n;
 }
 /* 
  * evenBits - return word with all even-numbered bits set to 1
@@ -238,10 +241,11 @@ int divpwr2(int x, int n) {
  *   Max ops: 8
  *   Rating: 2
  */
-int evenBits(void) {
+int evenBits(void)
+{
   /* exploit ability of left shift copy 0x55 in every byte*/
   int x = 0x55 | (0x55 << 8);
-  return  x | (x <<16);
+  return x | (x << 16);
 }
 /* 
  * fitsBits - return 1 if x can be represented as an 
@@ -252,11 +256,12 @@ int evenBits(void) {
  *   Max ops: 15
  *   Rating: 2
  */
-int fitsBits(int x, int n) {
+int fitsBits(int x, int n)
+{
   /*check is  n-bit,  use ^ to check if check == x */
   int y = 32 + (~n + 1);
-  int check =(x<<y)>>y ;
-  return !((check^x));
+  int check = (x << y) >> y;
+  return !((check ^ x));
 }
 /* 
  * getByte - Extract byte n from word x
@@ -266,11 +271,12 @@ int fitsBits(int x, int n) {
  *   Max ops: 6
  *   Rating: 2
  */
-int getByte(int x, int n) {
+int getByte(int x, int n)
+{
   /* exploit ability of shift to make byte n the least significant,
   and mask to extract byte n */
   int mask = 0xFF;
-  return x>>(n<<3) & mask;
+  return x >> (n << 3) & mask;
 }
 /* 
  * isGreater - if x > y  then return 1, else return 0 
@@ -279,16 +285,17 @@ int getByte(int x, int n) {
  *   Max ops: 24
  *   Rating: 3
  */
-int isGreater(int x, int y) {
+int isGreater(int x, int y)
+{
   /*if x and y have differnt sign , check whether x is positive
   otherwise, check the sign of x-y */
-  int xMinusy = x+(~y + 1);
-  int signxy =!(xMinusy>>31);
+  int xMinusy = x + (~y + 1);
+  int signxy = !(xMinusy >> 31);
   int equal = !(xMinusy ^ 0);
   int signx = x >> 31;
   int signy = y >> 31;
-  int nosameSign =(signx ^ signy)&0x1;
-  return (signxy & !nosameSign & !equal) | (nosameSign &!signx  );
+  int nosameSign = (signx ^ signy) & 0x1;
+  return (signxy & !nosameSign & !equal) | (nosameSign & !signx);
 }
 /* 
  * isNonNegative - return 1 if x >= 0, return 0 otherwise 
@@ -297,9 +304,10 @@ int isGreater(int x, int y) {
  *   Max ops: 6
  *   Rating: 3
  */
-int isNonNegative(int x) {
+int isNonNegative(int x)
+{
   /*check the sign*/
-  return !(x>>31);
+  return !(x >> 31);
 }
 /* 
  * isNotEqual - return 0 if x == y, and 1 otherwise 
@@ -308,8 +316,9 @@ int isNonNegative(int x) {
  *   Max ops: 6
  *   Rating: 2
  */
-int isNotEqual(int x, int y) {
- /* exploit ability of ^ to check if x == y*/
+int isNotEqual(int x, int y)
+{
+  /* exploit ability of ^ to check if x == y*/
   return !!(x ^ y);
 }
 /*
@@ -320,20 +329,21 @@ int isNotEqual(int x, int y) {
  *   Max ops: 60
  *   Rating: 4
  */
-int isPower2(int x) {
+int isPower2(int x)
+{
   /*check if the number of 1 in the x == 1 */
   int m1 = 0x11 | (0x11 << 8);
   int mask = m1 | (m1 << 16);
   int s = x & mask;
-  s += x>>1 & mask;
-  s += x>>2 & mask;
-  s += x>>3 & mask;
+  s += x >> 1 & mask;
+  s += x >> 2 & mask;
+  s += x >> 3 & mask;
   s = s + (s >> 16);
   mask = 0xF | (0xF << 8);
   s = (s & mask) + ((s >> 4) & mask);
-  int numOfOne = (s + (s>>8)) & 0x3F;
-  int sign = x>>31;
-  return !((numOfOne ^ 1)| sign);
+  int numOfOne = (s + (s >> 8)) & 0x3F;
+  int sign = x >> 31;
+  return !((numOfOne ^ 1) | sign);
 }
 /* 
  * leastBitPos - return a mask that marks the position of the
@@ -343,9 +353,10 @@ int isPower2(int x) {
  *   Max ops: 6
  *   Rating: 4 
  */
-int leastBitPos(int x) {
+int leastBitPos(int x)
+{
   /*return -x&x*/
-  return (~x+1)&x;
+  return (~x + 1) & x;
 }
 /* 
  * logicalShift - shift x to the right by n, using a logical shift
@@ -355,10 +366,11 @@ int leastBitPos(int x) {
  *   Max ops: 16
  *   Rating: 3 
  */
-int logicalShift(int x, int n) {
+int logicalShift(int x, int n)
+{
   /* exploit ability of mask to make the first n bit 0*/
-  int mask=((1<<(32-n)) + (~1 +1));
-  return mask & x>>n;
+  int mask = ((1 << (32 - n)) + (~1 + 1));
+  return mask & x >> n;
 }
 /*
  * satAdd - adds two numbers but when positive overflow occurs, returns
@@ -370,21 +382,22 @@ int logicalShift(int x, int n) {
  *   Max ops: 30
  *   Rating: 4
  */
-int satAdd(int x, int y) {
+int satAdd(int x, int y)
+{
   /*if the sign of x != the sign of y && the sign of x == the sign of (x+y)
       no overflow, just returns x+y;
       otherwise returns maximum possible value + signx & 0x1
   */
   int z = x + y;
-  int signx = (x>>31);
-  int signy = (y>>31);
-  int signz = (z>>31);
-  int nosameSignxy =(signx ^ signy);
-  int nosameSignxz =(signx ^ signz);
-  int upOver = ~(1<<31);
-  int noOver = (nosameSignxy|~nosameSignxz)& z;
-  int Over =((~nosameSignxy&nosameSignxz)&(upOver+(signx&0x1)));
-  return   noOver + Over;
+  int signx = (x >> 31);
+  int signy = (y >> 31);
+  int signz = (z >> 31);
+  int nosameSignxy = (signx ^ signy);
+  int nosameSignxz = (signx ^ signz);
+  int upOver = ~(1 << 31);
+  int noOver = (nosameSignxy | ~nosameSignxz) & z;
+  int Over = ((~nosameSignxy & nosameSignxz) & (upOver + (signx & 0x1)));
+  return noOver + Over;
 }
 /* 
  * tc2sm - Convert from two's complement to sign-magnitude 
@@ -395,9 +408,10 @@ int satAdd(int x, int y) {
  *   Max ops: 15
  *   Rating: 4
  */
-int tc2sm(int x) {
+int tc2sm(int x)
+{
   /*result = the sign of x | (|x|)*/
-  int sign = x>>31 & 0x1;
-  int absx = ((x>>31)^x)+sign;
-  return absx|((1<<31)&(x>>31));
+  int sign = x >> 31 & 0x1;
+  int absx = ((x >> 31) ^ x) + sign;
+  return absx | ((1 << 31) & (x >> 31));
 }

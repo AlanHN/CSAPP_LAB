@@ -1,7 +1,7 @@
 /* 
  * tsh - A tiny shell program with job control
  * 
- *  Lan Haoning 518021910270
+ *  AlanHN 518021910xxx
  *  (PS:system calls are checked in their wrapped functions.)
  */
 #include <stdio.h>

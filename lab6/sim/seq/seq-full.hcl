@@ -9,7 +9,7 @@
 ## for iaddq (IIADDQ)
 ## Your job is to add the rest of the logic to make it work
 
-# Lan Haoning 518021910270
+# AlanHN 518021910xxx
 ####################################################################
 # Description of the computations of iaddq instruction
 # Fetch: 

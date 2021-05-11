@@ -1,7 +1,7 @@
 /*
  * proxy.c - ICS Web proxy
  *
- * 518021910270 Lan Haoning
+ * 518021910xxx AlanHN
  */
 
 #include "csapp.h"
